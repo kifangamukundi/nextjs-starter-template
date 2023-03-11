@@ -26,6 +26,7 @@ export default function Navbar() {
 
   return (
     <nav className="w-full flex py-6 justify-between items-center navbar">
+      <h3 className="hidden">Main Navigation</h3>
       <Link href={`/`}>
         <Image src={logo} alt="logo" className="w-1/2 h-1/5 object-cover" />
       </Link>
@@ -36,16 +37,18 @@ export default function Navbar() {
             key={nav.id}
             className={`font-sans font-normal cursor-pointer text-[16px] text-white mr-10`}
           >
-            <Link href={`${nav.link}`}>{nav.title}</Link>
+            <Link href={`${nav.link}`}>
+                <h4>{nav.title}</h4>
+              </Link>
           </li>
         ))}
 
         {userInfo?.user?.accessToken && decodedUser?.isadmin && (
         <li className={`font-sans font-normal cursor-pointer text-[16px] text-white mr-10`}>
             <Link
-            href="/manage/dashboard"
+            href="/dashboard/admin"
             >
-            Dashboard
+            <h4>Dashboard</h4>
             </Link>
         </li>
         )}
@@ -55,13 +58,13 @@ export default function Navbar() {
                 href="#signout"
                 onClick={signoutHandler}
             >
-                Sign Out
+                <h4>Sign Out</h4>
             </Link>
             </li>
         ) : (
             <li className={`font-sans font-normal cursor-pointer text-[16px] text-white mr-10`}>
             <Link href="/login">
-                Sign In
+                <h4>Sign In</h4>
             </Link>
             </li>
         )}
@@ -69,6 +72,7 @@ export default function Navbar() {
       
       <ToastContainer/>
       {/* Mobile devices */}
+      <h3 className="hidden">Mobile Navigation</h3>
       <div className="sm:hidden flex flex-1 justify-end items-center">
             <img
             src={toggle ? close : menu}
@@ -88,7 +92,9 @@ export default function Navbar() {
                     key={nav.id}
                     className={`font-poppins font-medium cursor-pointer text-[16px] text-white mb-4`}
                 >
-                    <Link href={`${nav.link}`}>{nav.title}</Link>
+                    <Link href={`${nav.link}`}>
+                      <h4>{nav.title}</h4>
+                    </Link>
                 </li>
                 ))}
 
@@ -97,7 +103,7 @@ export default function Navbar() {
                     <Link
                     href="/manage/dashboard"
                     >
-                    Dashboard
+                    <h4>Dashboard</h4>
                     </Link>
                 </li>
                 )}
@@ -107,13 +113,13 @@ export default function Navbar() {
                         href="#signout"
                         onClick={signoutHandler}
                     >
-                        Sign Out
+                        <h4>Sign Out</h4>
                     </Link>
                     </li>
                 ) : (
                     <li className={`font-poppins font-medium cursor-pointer text-[16px] text-white mb-4`}>
                     <Link href="/login">
-                        Sign In
+                        <h4>Sign In</h4>
                     </Link>
                     </li>
                 )}

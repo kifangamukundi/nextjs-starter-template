@@ -1,5 +1,5 @@
 async function getData() {
-    const res = await fetch('http://localhost:5000/api/structures', { next: { revalidate: 30 } });
+    const res = await fetch('http://localhost:5000/api/products', { next: { revalidate: 30 } });
     // { cache: 'no-store' }
     // { next: { revalidate: 10 } }
     // The return value is *not* serialized

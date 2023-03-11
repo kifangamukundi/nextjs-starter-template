@@ -1,13 +1,13 @@
 'use client'
 import React, { useContext, useReducer, useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation';
-import Axios from 'axios';
 import { toast } from 'react-toastify';
+import Axios from 'axios';
+
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 import { getError, BASE_URL, LoadingSpinner, MessageInformation } from '@/components';
-
 import { ThemeContext } from '@/app/theme-provider';
-import Link from 'next/link';
 
 
 const reducer = (state, action) => {
@@ -112,7 +112,7 @@ export default function Login() {
         </div>
         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
             New user?{' '}
-            <Link href={`/register?redirect=/login`}>Create your account</Link>
+            <Link href={`/register?redirect=/register`}>Create your account</Link>
         </p>
 
         <p className="text-sm font-semibold mt-2 pt-1 mb-0">
