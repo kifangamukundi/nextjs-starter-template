@@ -121,6 +121,13 @@ export default function ProductsDashboard() {
                                   Create
                               </button>
                           </Link>
+                          {/* Temp */}
+                          <Link href={`/dashboard/admin/categories/create`}>
+                              <button class="px-3 py-1 bg-gray-200 text-gray-700 rounded-md mr-2">
+                                  <svg class="w-4 h-4 inline-block mr-1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+                                  category
+                              </button>
+                          </Link>
                       </div>
                     </div>
                     

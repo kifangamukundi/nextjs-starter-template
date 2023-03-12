@@ -8,6 +8,7 @@ import Tiptap from "./TipTap";
 import { ImageCarousel } from "./ImageSlider";
 import Modal from "./Modal";
 import useKeyPress from "./useKeyPress";
+import Checkboxes from "./CheckBox";
 
 export {
     Navbar,
@@ -21,4 +22,5 @@ export {
     ImageCarousel,
     Modal,
     useKeyPress,
+    Checkboxes,
 };

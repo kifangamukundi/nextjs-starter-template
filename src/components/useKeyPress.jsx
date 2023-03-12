@@ -5,7 +5,7 @@ const useKeyPress = (keyMap, callbackMap) => {
     const [keyPressed, setKeyPressed] = useState(new Set());
 
     const downHandler = (event) => {
-      event.preventDefault();
+      // event.preventDefault();
       const { key, altKey, shiftKey, ctrlKey } = event;
   
       const modifiers = [];
@@ -33,7 +33,7 @@ const useKeyPress = (keyMap, callbackMap) => {
     };
   
     const upHandler = (event) => {
-      event.preventDefault();
+      // event.preventDefault();
       const { key, altKey, shiftKey, ctrlKey } = event;
   
       const modifiers = [];

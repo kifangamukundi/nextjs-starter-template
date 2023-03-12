@@ -1,5 +1,5 @@
 'use client'
-import React, { useContext, useReducer, useState } from 'react'
+import React, { useEffect, useReducer, useState } from 'react'
 import { toast } from 'react-toastify';
 import axios from 'axios';
 
@@ -11,6 +11,7 @@ import { getError, BASE_URL, LoadingSpinner, MessageInformation, Tiptap } from '
 import { ThemeContext } from '@/app/theme-provider';
 import { useAuth } from '@/components';
 import { Modal } from '@/components';
+import useCheckbox from '@/components/useCheckbox';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -51,14 +52,37 @@ export default function CreateProduct() {
   const [summary, setSummary] = useState('');
   const [defaultImage, setDafaultImage] = useState('');
   const [otherImages, setOtherImages] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [content, setContent] = useState("<p>Test</p>");
 
   const [showModal, setShowModal] = useState(false);
 
+  const [checkedItems, checkboxes] = useCheckbox(categories);
+
+  console.log(checkedItems);
+  
+  // Fetch categories
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: 'FETCH_REQUEST' });
+        const { data } = await axios.get(`${BASE_URL}/categories`);
+
+        dispatch({ type: 'FETCH_SUCCESS' });
+
+        setCategories(data.data.categories);
+      } catch (err) {
+        dispatch({
+          type: 'FETCH_FAIL',
+          payload: getError(err),
+        });
+      }
+    };
+    fetchData();
+  }, []);
 
   const createHandler = async (e) => {
     e.preventDefault();
-    console.log({all: otherImages, first: defaultImage});
     try {
       dispatch({ type: 'CREATE_REQUEST' });
       const {data} = await axiosInstance.post(
@@ -70,6 +94,7 @@ export default function CreateProduct() {
           defaultImage,
           otherImages,
           content,
+          categories: checkedItems,
         },
         {
           headers: { Authorization: `Bearer ${accessToken}` },
@@ -137,8 +162,7 @@ export default function CreateProduct() {
     'preview': () => setShowModal(prevModalVisible => !prevModalVisible),
   };
   useKeyPress(keyMap, callbackMap);
-  
-  
+
 
   return (
     <div className="container w-full md:max-w-3xl mx-auto pt-20">
@@ -205,6 +229,25 @@ export default function CreateProduct() {
             placeholder="Example... structure-name"
             onChange={(e) => generateSlug(e.target.value)}
           />
+        </div>
+
+        <div className="w-full md:w-1/2 mb-4 md:pl-2">
+          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="category">
+            Category
+          </label>
+          {/* testing */}
+            <div className="container mx-auto">
+              <h1 className="text-2xl font-bold">Checkbox List</h1>
+              {checkboxes}
+              <div>
+                <strong>Selected items:</strong>
+                <ul>
+                  {checkedItems.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
         </div>
 
         <div className="w-full mb-4">
