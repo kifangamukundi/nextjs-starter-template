@@ -6,6 +6,8 @@ import MessageInformation from "./Messages";
 import useAuth from "./useAuth";
 import Tiptap from "./TipTap";
 import { ImageCarousel } from "./ImageSlider";
+import Modal from "./Modal";
+import useKeyPress from "./useKeyPress";
 
 export {
     Navbar,
@@ -17,4 +19,6 @@ export {
     useAuth,
     Tiptap,
     ImageCarousel,
+    Modal,
+    useKeyPress,
 };

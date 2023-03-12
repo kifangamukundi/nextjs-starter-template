@@ -5,10 +5,12 @@ import axios from 'axios';
 
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useKeyPress } from '@/components';
 
 import { getError, BASE_URL, LoadingSpinner, MessageInformation, Tiptap } from '@/components';
 import { ThemeContext } from '@/app/theme-provider';
 import { useAuth } from '@/components';
+import { Modal } from '@/components';
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -51,6 +53,8 @@ export default function CreateProduct() {
   const [otherImages, setOtherImages] = useState([]);
   const [content, setContent] = useState("<p>Test</p>");
 
+  const [showModal, setShowModal] = useState(false);
+
 
   const createHandler = async (e) => {
     e.preventDefault();
@@ -71,7 +75,6 @@ export default function CreateProduct() {
           headers: { Authorization: `Bearer ${accessToken}` },
         }
       );
-      console.log(data)
       dispatch({ type: 'CREATE_SUCCESS', payload: data });
       toast.success(data.message);
       router.push(`/dashboard/admin/products`);
@@ -101,7 +104,6 @@ export default function CreateProduct() {
           authorization: `Bearer ${accessToken}`,
         },
       });
-      console.log(data)
       dispatch({ type: 'UPLOAD_SUCCESS' });
       toast.success('Upload Success');
       const urls = data.map(image => ({ secure_url: image.secure_url, public_id: image.public_id }));
@@ -124,6 +126,19 @@ export default function CreateProduct() {
       fileUploadHandler(files);
     }
   }
+
+  // Keyboard mappings
+  const keyMap = {
+    'ctrl+shift+b' : 'back',
+    'ctrl+shift+p': 'preview',
+  };
+  const callbackMap = {
+    'back': () => router.push(`/dashboard/admin/products`),
+    'preview': () => setShowModal(prevModalVisible => !prevModalVisible),
+  };
+  useKeyPress(keyMap, callbackMap);
+  
+  
 
   return (
     <div className="container w-full md:max-w-3xl mx-auto pt-20">
@@ -153,11 +168,9 @@ export default function CreateProduct() {
                   </div>
 
                   <div className="w-full md:w-1/2 mb-4 md:pr-2">
-                      <Link href={`dashboard/admin/products`}>
-                          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                              Preview
-                          </button>
-                      </Link>
+                      <button  onClick={() => setShowModal(true)} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                          Preview
+                      </button>
                   </div>
 
               </div>
@@ -241,6 +254,7 @@ export default function CreateProduct() {
           </button>
       </div>
       
+      <Modal showModal={showModal} setShowModal={setShowModal} />
     </div>
   )
 }
