@@ -1,8 +1,8 @@
 'use client'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
-const useCheckbox = (options) => {
-  const [checkedItems, setCheckedItems] = useState([]);
+const useCheckbox = (options, preSelectedIds = []) => {
+  const [checkedItems, setCheckedItems] = useState(preSelectedIds);
 
   const handleCheckboxChange = (id) => {
     const isChecked = checkedItems.includes(id);
@@ -32,5 +32,3 @@ const useCheckbox = (options) => {
 };
 
 export default useCheckbox;
-
-

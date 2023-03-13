@@ -3,7 +3,7 @@ import { LoadingSpinner } from "@/components";
 import ProductDetails from "./ProductDetails";
   
   async function getProductData(id) {
-    const res = await fetch(`http://localhost:5000/api/products/${id}`, { next: { revalidate: 2 } });
+    const res = await fetch(`http://localhost:5000/api/products/with-categories/${id}`, { next: { revalidate: 2 } });
     return res.json();
   }
 

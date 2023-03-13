@@ -1,8 +1,9 @@
 'use client'
-import React, { useMemo, useReducer, useState } from 'react';
+import React, { useMemo, useReducer, useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import { generateHTML } from '@tiptap/html';
 import StarterKit from '@tiptap/starter-kit';
@@ -10,8 +11,10 @@ import Underline from "@tiptap/extension-underline";
 import Highlight from "@tiptap/extension-highlight";
 
 import { BASE_URL, LoadingSpinner, MessageInformation, getError } from '@/components';
+import useCheckbox from '@/components/useCheckbox';
 import { Tiptap } from '@/components';
 import { useAuth } from '@/components';
+import { ImageGalleryModal } from '@/components';
 
 
 const reducer = (state, action) => {
@@ -46,13 +49,56 @@ const router = useRouter();
 const { axiosInstance, accessToken } = useAuth();
 
 const [{ error, loadingUpdate, loadingUpload }, dispatch] =
-    useReducer(reducer, {
-      error: '',
-    });
+useReducer(reducer, {
+  error: '',
+});
 
 const [image, setImage] = useState(product.defaultImage);
 const [images, setImages] = useState(product.otherImages);
 const [content, setContent] = useState(product.content);
+const [categories, setCategories] = useState([]);
+const [newCategories, setNewCategories] = useState([]);
+
+const [showModal, setShowModal] = useState(false);
+const handleModalOpen = () => {
+  setShowModal(true);
+};
+
+const preSelectedIds =product.categories.map(item => item._id);
+const [checkedItems, checkboxes] = useCheckbox(newCategories, preSelectedIds);
+
+const addCheckedProperty = (options, selectedIds) => {
+  return options.map((option) => {
+    if (selectedIds.includes(option._id)) {
+      return { ...option, checked: true };
+    } else {
+      return { ...option, checked: false };
+    }
+  });
+};
+
+  
+// Fetch categories
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      dispatch({ type: 'FETCH_REQUEST' });
+      const { data } = await axios.get(`${BASE_URL}/categories`);
+
+      dispatch({ type: 'FETCH_SUCCESS' });
+
+      setCategories(data.data.categories);
+      const newcollection = addCheckedProperty(data.data.categories, preSelectedIds)
+      setNewCategories(newcollection)
+    } catch (err) {
+      dispatch({
+        type: 'FETCH_FAIL',
+        payload: getError(err),
+      });
+    }
+  };
+  fetchData();
+}, []);
 
 // Testing
 const initialState = product;
@@ -81,7 +127,8 @@ const handleSubmit = async (e) => {
 
   const updates = {
     ...updatedFields,
-    content
+    content,
+    categories: checkedItems,
   }
 
   try {
@@ -97,9 +144,6 @@ const handleSubmit = async (e) => {
   }
 };
 
-
-
-
 const output = useMemo(() => {
     return generateHTML(content, [
         StarterKit,
@@ -107,6 +151,8 @@ const output = useMemo(() => {
         Highlight.configure({multicolor: true}),
     ])
     }, []);
+
+    
   return (
     <div className="container w-full md:max-w-3xl mx-auto pt-20">
       
@@ -180,6 +226,25 @@ const output = useMemo(() => {
           />
         </div>
 
+        <div className="w-full md:w-1/2 mb-4 md:pl-2">
+          <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="category">
+            Category
+          </label>
+          {/* testing */}
+            <div className="container mx-auto">
+              <h1 className="text-2xl font-bold">Checkbox List</h1>
+              {checkboxes}
+              <div>
+                <strong>Selected items:</strong>
+                <ul>
+                  {checkedItems.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+        </div>
+
         <div className="w-full mb-4">
           <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="summary">
             Short Summary
@@ -227,6 +292,11 @@ const output = useMemo(() => {
               Update
           </button>
       </div>
+
+      {/* Am testing the gallery */}
+
+      <button onClick={handleModalOpen}>Open Gallery Modal</button>
+      <ImageGalleryModal showModal={showModal} setShowModal={setShowModal} images={images} />
       
     </div>
   )

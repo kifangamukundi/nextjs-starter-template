@@ -58,8 +58,6 @@ export default function CreateProduct() {
   const [showModal, setShowModal] = useState(false);
 
   const [checkedItems, checkboxes] = useCheckbox(categories);
-
-  console.log(checkedItems);
   
   // Fetch categories
   useEffect(() => {
@@ -123,7 +121,7 @@ export default function CreateProduct() {
   
     try {
       dispatch({ type: 'UPLOAD_REQUEST' });
-      const { data } = await axios.post(`${BASE_URL}/uploads/cloudinary`, formData, {
+      const { data } = await axios.post(`${BASE_URL}/uploads/new-media`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${accessToken}`,

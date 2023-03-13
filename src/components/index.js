@@ -9,6 +9,7 @@ import { ImageCarousel } from "./ImageSlider";
 import Modal from "./Modal";
 import useKeyPress from "./useKeyPress";
 import Checkboxes from "./CheckBox";
+import ImageGalleryModal from "./ImagesModal";
 
 export {
     Navbar,
@@ -23,4 +24,5 @@ export {
     Modal,
     useKeyPress,
     Checkboxes,
+    ImageGalleryModal,
 };
