@@ -3,7 +3,7 @@ import { LoadingSpinner } from "@/components";
 import ProductDetails from "./ProductDetails";
   
   async function getProductData(slug) {
-    const res = await fetch(`http://localhost:5000/api/products/slug/${slug}`, { next: { revalidate: 2 } });
+    const res = await fetch(`http://localhost:5000/api/products/slug/${slug}`, { cache: 'no-store' });
     return res.json();
   }
 

@@ -1,9 +1,9 @@
 'use client'
 import React from "react";
 import axios from 'axios';
-import { getError, BASE_URL } from '@/components';
+import {  BASE_URL } from '@/components';
 
-export default function ImageGalleryModal({ showModal, setShowModal, images }) {
+export default function ImageGalleryModal({ showModal, setShowModal, images, setImages }) {
   const closeModal = () => {
     setShowModal(false);
   };
@@ -13,20 +13,38 @@ export default function ImageGalleryModal({ showModal, setShowModal, images }) {
       deleteImage(publicId);
     }
   };
-  
+
+// const deleteImage = async (publicId) => {
+//     try {
+//       const response = await axios.post(`${BASE_URL}/uploads/delete-media`, { public_id: publicId });
+
+//       if (response.status === 200) {
+//         console.log(`Image ${publicId} has been deleted successfully.`);
+//       }
+
+//       return response.data;
+//     } catch (error) {
+//       console.error(`Error deleting image ${publicId}: ${error}`);
+//     }
+//   };
 const deleteImage = async (publicId) => {
     try {
       const response = await axios.post(`${BASE_URL}/uploads/delete-media`, { public_id: publicId });
-
+  
       if (response.status === 200) {
         console.log(`Image ${publicId} has been deleted successfully.`);
+  
+        // Remove deleted image from the images array and update state
+        const updatedImages = images.filter(image => image.public_id !== publicId);
+        setImages(updatedImages);
       }
-
+  
       return response.data;
     } catch (error) {
       console.error(`Error deleting image ${publicId}: ${error}`);
     }
   };
+  
 
 const imageList = (
     <div className="flex flex-wrap">

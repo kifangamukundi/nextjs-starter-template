@@ -296,7 +296,7 @@ const output = useMemo(() => {
       {/* Am testing the gallery */}
 
       <button onClick={handleModalOpen}>Open Gallery Modal</button>
-      <ImageGalleryModal showModal={showModal} setShowModal={setShowModal} images={images} />
+      <ImageGalleryModal setImages={setImages} showModal={showModal} setShowModal={setShowModal} images={images} />
       
     </div>
   )
